@@ -1,3 +1,8 @@
+import json
+import os
+import requests
+
+
 class VideoPart:
 	def __init__(self, cid, page, part, duration, dimension, first_frame_url, download_url=None):
 		"""
@@ -24,15 +29,18 @@ class VideoSet:
 	一条视频集合的信息，包括整个集合
 	"""
 
-	def __init__(self, bvid: str, title: str = None, part_num: int = 1, parts: list[VideoPart] = None, cover_url:str = None):
+	def __init__(self, aid: int, bvid: str, title: str = None, part_num: int = 1, parts: list[VideoPart] = None,
+	             cover_url: str = None):
 		"""
 		一条视频集合的信息，包括整个集合
+		:param aid: 视频aid
 		:param bvid: 视频bv号
 		:param title: 视频标题
 		:param part_num: 视频分p数量
 		:param parts: 视频分p信息列表
 		:param cover_url: 视频封面
 		"""
+		self.aid: int = aid
 		self.bvid: str = bvid
 		self.title: str = title
 		self.part_num: int = part_num
