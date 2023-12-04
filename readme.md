@@ -37,11 +37,14 @@ VideoTranscript/
 │   ├── test_audio_processor.py
 │   └── test_utils.py
 ├── data/                  # 存放数据的目录
-│   ├── downloads/         # 存放下载的视频
-│   ├── audios/            # 存放转换的音频
-│   ├── transcriptions/    # 存放转录的文字
-│   ├── frames/            # 存放截取的关键帧
-│   └── summaries/         # 存放生成的视频总结
+│   ├── BVxxxxxxxx/        # 以视频的BV号命名的目录
+│   │   ├── downloads/     # 存放下载的视频
+│   │   ├── audios/        # 存放转换的音频
+│   │   ├── segments/      # 存放音频分段
+│   │   ├── transcriptions/# 存放音频转录的文字
+│   │   ├── frames/        # 存放截取的关键帧
+│   │   └── summaries/     # 存放生成的视频总结
+│   └── ...
 ├── .env                   # 存放环境变量的文件
 ├── requirements.txt       # 存放Python依赖的文件
 ├── README.md              # 项目说明文件

@@ -16,11 +16,11 @@ class BiliDownloader:
 		:param path: 下载路径，默认为None，表示使用当前工作目录
 		:return: 下载成功返回True，否则返回False
 		"""
-		if path is None:
-			path = os.getcwd()
 
-		# 下载到/downloads/BV号/下
-		path = os.path.join(path, "downloads", video_set.bvid)
+		# 默认下载到当前目录/data/BV号/downloads/下
+		if path is None:
+			path = os.path.join(os.getcwd(), "data", video_set.bvid, "downloads")
+
 		# 如果目录不存在，就创建一个
 		if not os.path.exists(path):
 			os.makedirs(path)
