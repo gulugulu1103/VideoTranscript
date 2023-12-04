@@ -8,7 +8,7 @@ from VideoTranscript import VideoSet, VideoPart, VideoUtils
 
 class BiliDownloader:
 	@staticmethod
-	def download_videoset(video_set: VideoSet, path: Optional[str] = None) -> bool:
+	def download_video_set(video_set: VideoSet, path: Optional[str] = None) -> bool:
 		"""
 		下载一个视频集合
 
@@ -39,12 +39,12 @@ class BiliDownloader:
 			# [P?]-BV号-分p标题.mp4
 			filename = "[P" + str(part.page) + "]-" + video_set.bvid + "-" + part.part + ".mp4"
 			filename = os.path.join(path, filename)
-			BiliDownloader.download_videopart(part, filename = filename)
+			BiliDownloader.download_video_part(part, filename = filename)
 			time.sleep(3)
 		return True
 
 	@staticmethod
-	def download_videopart(part: VideoPart, filename: str, header: Optional[dict] = None) -> bool:
+	def download_video_part(part: VideoPart, filename: str, header: Optional[dict] = None) -> bool:
 		"""
 		下载视频分P
 

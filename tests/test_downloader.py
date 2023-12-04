@@ -70,7 +70,7 @@ class TestBiliDownloader(unittest.TestCase):
 		mock_requests.get.return_value.__enter__.return_value = mock_response
 
 		# 测试download_videopart()方法
-		result = BiliDownloader.download_videopart(mock_video_part, 'mock_filename')
+		result = BiliDownloader.download_video_part(mock_video_part, 'mock_filename')
 		self.assertTrue(result)
 
 		# 验证requests.get()是否被正确调用

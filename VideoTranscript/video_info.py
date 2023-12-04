@@ -1,25 +1,25 @@
-import time
-import requests
-import dotenv
-from typing import List
 import logging
+import time
+from typing import List
+
+import dotenv
+import requests
 
 import downloader
 from data import VideoPart, VideoSet
-from utils import VideoUtils
 
 
 class InfoFetcher:
-	def __init__(self, BV: str, bili_key: str = None, header: dict = None):
+	def __init__(self, bvid: str, bili_key: str = None, header: dict = None):
 		"""
 		初始化BiliDownloader类
 
-		:param BV: Bilibili视频的BV号
+		:param bvid: Bilibili视频的BV号
 		:param bili_key: Bilibili API的key
 		:param header: 请求头，用于模拟浏览器
 
 		"""
-		self.BV = BV
+		self.BV = bvid
 		self.bili_key = bili_key
 		if bili_key is None:
 			self.bili_key = dotenv.get_key(".env", "BILI_KEY")
@@ -34,7 +34,7 @@ class InfoFetcher:
 			}
 		self.logger = logging.getLogger(__name__)
 
-	def get_video_meta(self) -> dict:
+	def get_video_meta(self) -> VideoSet:
 		"""
 		获取视频元数据
 
@@ -44,7 +44,26 @@ class InfoFetcher:
 		response = requests.get("https://bili.zhouql.vip/meta/" + self.BV, headers = self.header)
 		response.encoding = 'utf-8'
 		self.logger.info("获取视频元数据成功！")
-		return response.json()
+		j = response.json()
+		self.logger.debug("获取到json from API：" + str(j))
+		video_set = VideoSet(
+				aid = j["data"]["aid"],
+				bvid = j["data"]["bvid"],
+				title = j["data"]["title"],
+				desc = j["data"]["desc"],
+				part_num = j["data"]["videos"],
+				cover_url = j["data"]["pic"]
+		)
+		self.logger.debug("获取到视频元数据：" + str(video_set))
+		self.logger.info("正在获取视频分P...")
+		video_set.parts = self.get_video_parts(j)
+		self.logger.info("获取视频分P成功！（未获取下载链接）")
+		self.logger.debug("获取到视频分P：" + str(video_set.parts))
+		self.logger.info("正在获取下载链接...")
+		self.get_download_urls(video_set)
+		self.logger.info("获取下载链接成功！")
+
+		return video_set
 
 	def get_video_parts(self, j: dict) -> List[VideoPart]:
 		"""
@@ -53,7 +72,6 @@ class InfoFetcher:
 		:param j: 包含视频元数据的字典
 		:return: VideoPart对象的列表
 		"""
-		self.logger.info("正在获取视频分P...")
 		parts = []
 		for each in j["data"]["pages"]:
 			new_part = VideoPart(
@@ -69,7 +87,6 @@ class InfoFetcher:
 			self.logger.info("获取到第" + str(new_part.page) + "P：" + str(new_part.part))
 			parts.append(new_part)
 
-		self.logger.info("获取视频分P成功！")
 		return parts
 
 	def get_download_urls(self, video_set: VideoSet):
@@ -78,7 +95,6 @@ class InfoFetcher:
 
 		:param video_set: VideoSet对象
 		"""
-		self.logger.info("正在获取下载链接...")
 		for each in video_set.parts:
 			response = requests.get("https://bili.zhouql.vip/download/" + str(video_set.aid) + "/" + str(each.cid),
 			                        headers = self.header)
@@ -88,12 +104,3 @@ class InfoFetcher:
 			time.sleep(3)
 			self.logger.info("获取到第" + str(each.page) + "P的下载链接：" + str(each.download_url))
 		self.logger.info("获取下载链接成功！")
-
-	@staticmethod
-	def download_videoset(video_set: VideoSet):
-		"""
-		下载视频集
-
-		:param video_set: VideoSet对象
-		"""
-		downloader.BiliDownloader.download_videoset(video_set)
