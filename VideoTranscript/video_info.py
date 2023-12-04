@@ -4,6 +4,7 @@ import dotenv
 from typing import List
 import logging
 
+import downloader
 from data import VideoPart, VideoSet
 from utils import VideoUtils
 
@@ -14,6 +15,9 @@ class InfoFetcher:
 		初始化BiliDownloader类
 
 		:param BV: Bilibili视频的BV号
+		:param bili_key: Bilibili API的key
+		:param header: 请求头，用于模拟浏览器
+
 		"""
 		self.BV = BV
 		self.bili_key = bili_key
@@ -44,7 +48,7 @@ class InfoFetcher:
 
 	def get_video_parts(self, j: dict) -> List[VideoPart]:
 		"""
-		获取视频各部分
+		获取视频各分P的信息
 
 		:param j: 包含视频元数据的字典
 		:return: VideoPart对象的列表
@@ -85,10 +89,11 @@ class InfoFetcher:
 			self.logger.info("获取到第" + str(each.page) + "P的下载链接：" + str(each.download_url))
 		self.logger.info("获取下载链接成功！")
 
-	def download_videoset(self, video_set: VideoSet):
+	@staticmethod
+	def download_videoset(video_set: VideoSet):
 		"""
 		下载视频集
 
 		:param video_set: VideoSet对象
 		"""
-		InfoFetcher.download_videoset(video_set)
+		downloader.BiliDownloader.download_videoset(video_set)

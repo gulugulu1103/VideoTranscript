@@ -40,6 +40,7 @@ VideoTranscript/
 │   ├── downloads/         # 存放下载的视频
 │   ├── audios/            # 存放转换的音频
 │   ├── transcriptions/    # 存放转录的文字
+│   ├── frames/            # 存放截取的关键帧
 │   └── summaries/         # 存放生成的视频总结
 ├── .env                   # 存放环境变量的文件
 ├── requirements.txt       # 存放Python依赖的文件
