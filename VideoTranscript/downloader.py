@@ -27,11 +27,8 @@ class BiliDownloader:
 
 		# 在这个目录下记录一下json
 		# encoding-utf8（包含中文）
-		with open(os.path.join(path, video_set.bvid + ".json"), "w", encoding = "utf8") as f:
-			f.write(json.dumps(video_set,
-			                   indent = 4,
-			                   ensure_ascii = False,
-			                   default = VideoUtils.serialize_obj))
+		with open(os.path.join(os.getcwd(), "data", video_set.bvid, video_set.bvid + ".json"), "w", encoding = "utf-8") as f:
+			f.write(video_set.model_dump_json(indent = 4))
 
 		for part in video_set.parts:
 			if part.download_url is None:
@@ -57,7 +54,7 @@ class BiliDownloader:
 			header = {
 				"User-Agent"     : "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) "
 				                   "Chrome/121.0.0.0 Safari/537.36 Edg/121.0.0.0",
-				"Accept"         : "application/json, text/plain, */*",
+				"Accept"         : "application/json, raw_text/plain, */*",
 				"Accept-Encoding": "gzip, deflate, br",
 				"Accept-Language": "zh-CN,zh;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6,ko;q=0.5",
 			}

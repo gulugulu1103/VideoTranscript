@@ -10,7 +10,7 @@ from data import VideoPart, VideoSet
 # 定义请求头
 header = {
 	"User-Agent"     : "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36 Edg/121.0.0.0",
-	"Accept"         : "application/json, text/plain, */*",
+	"Accept"         : "application/json, raw_text/plain, */*",
 	"Accept-Encoding": "gzip, deflate, br",
 	"Accept-Language": "zh-CN,zh;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6,ko;q=0.5",
 }
@@ -51,8 +51,5 @@ class VideoUtils:
 		:param data: 包含VideoSet数据的字典
 		:return: VideoSet对象
 		"""
-		parts = [VideoUtils.deserialize_video_part(part_data) for part_data in data['parts']]
+		parts = [VideoUtils.deserialize_video_part(part_data) for part_data in data.get('parts', [])]
 		return VideoSet(parts=parts, **data)
-
-
-		return True
